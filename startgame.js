@@ -11,7 +11,7 @@
                 })
 
                 // let data = response.json jsoonnn
-                // new pull didnt pull a new request
+                // new pull did pull a new request
             })
         }
 

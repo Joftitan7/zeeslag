@@ -3,153 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Winkelmandje</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Battleship Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+        }
+
+        .game-section {
+            text-align: center;
+        }
+
+        .gameboard {
+            display: grid;
+            grid-template-columns: repeat(10, 50px);
+            grid-template-rows: repeat(10, 50px);
+            gap: 5px;
+            padding: 20px;
+            background-color: #cceeff;
+            border: 5px solid #007bff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid-cell {
+            background-color: white;
+            border: 2px solid black;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .grid-cell:hover {
+            background-color: #d6d6d6;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            margin: 0 10px;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #666;
+        }
+
+        #password {
+            background-color: #007bff;
+            color: white; /* Text color */
+            border: 2px solid #007bff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        #password::placeholder {
+            color: white; 
+            opacity: 1; 
+        }
+
+        #password:focus {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    </style>
 </head>
 <body>
-<div class="fluid-container">
-    <div class="row">
-        <div class="col-6">
-            <h1>Producten ingeven</h1>
-            <form id="productForm">
-                <div class="form-group">
-                    <label for="productName">Productnaam:</label>
-                    <input type="text" class="form-control" id="productName" required>
-                </div>
-                <div class="form-group">
-                    <label for="productQuantity">Aantal:</label>
-                    <input type="number" class="form-control" id="productQuantity" required>
-                </div>
-                <div class="form-group">
-                    <label for="productPrice">Prijs per product:</label>
-                    <input type="number" class="form-control" id="productPrice" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Toevoegen</button>
-                <p id="add-cart-error" class="error"></p>
-            </form>
 
-            <h1 class="mt-5">Product verwijderen</h1>
-            <form id="removeProductForm">
-                <div class="form-group">
-                    <label for="removeProductName">Productnaam:</label>
-                    <input type="text" class="form-control" id="removeProductName" required>
-                </div>
-                <button type="submit" class="btn btn-danger">Verwijderen</button>
-                <p id="remove-cart-error" class="error"></p>
-            </form>
+    <div class="game-container">
+        <div class="game-section">
+            <h2>Player One</h2>
+            <div id="player-one-board" class="gameboard"></div>
         </div>
-        <div class="col-6">
-            <h1>Kortingsbon ingeven</h1>
-            <form id="couponForm">
-                <div class="form-group">
-                    <label for="couponCode">Kortingscode:</label>
-                    <input type="text" class="form-control" id="couponCode">
-                </div>
-                <button type="submit" class="btn btn-primary">Toepassen</button>
-            </form>
 
-            <h1 class="mt-5">Winkelmandje</h1>
-            <div id="cartDetails" class="mt-3">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Productnaam</th>
-                        <th>Aantal</th>
-                        <th>Prijs per product</th>
-                        <th>Totaalprijs</th>
-                    </tr>
-                    </thead>
-                    <tbody id="cartTableBody">
-                    <!-- template slot -->
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <td colspan="3">Korting</td>
-                        <td id="discount">0 &euro;</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">BTW (21%)</td>
-                        <td id="vat">0 &euro;</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"><strong>Totaal</strong></td>
-                        <td id="total">0 &euro;</td>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
+        <div class="game-section">
+            <h2>Player Two</h2>
+            <div id="player-two-board" class="gameboard"></div>
         </div>
     </div>
-</div>
 
-<script src="index.js"></script>
-<script>
-    let cart = [];
-    let coupon = 0;
+    <!-- Controls Section  -->
+    <div class="controls">
+        <button id="start" class="btn btn-primary">Start Game</button>
+        <button id="reset" class="btn btn-danger">Reset</button>
+        <input class="btn btn-danger" id="password" type="text" placeholder="Enter Password">
+        <button class="btn btn-primary" id="confirm">Confirm</button>
+    </div>
 
-    function updateCartDetailsDom(cart) {
-        let details = updateCartDetails(cart, coupon);
+    <footer>
+        <p>Battleship Game &copy; 2024</p>
+    </footer>
 
-        let cartTableBody = document.querySelector('#cartTableBody');
-        cartTableBody.innerHTML = '';
+    <script>
+const boatPositions = [2, 5, 10, 15, 22, 35, 50, 75]; // Example boat locations
 
-        cart.forEach(product => {
-            let row = `<tr>
-                            <td>${product.name}</td>
-                            <td>${product.quantity}</td>
-                            <td>${product.price} &euro;</td>
-                            <td>${product.total} &euro;</td>
-                        </tr>`;
-            cartTableBody.innerHTML += row;
+// Function to generate a 10x10 grid for a gameboard
+function createGameBoard(boardId) {
+    const gameBoard = document.getElementById(boardId);
+    for (let i = 0; i < 100; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('grid-cell');
+        
+        cell.addEventListener('click', function() {
+            if (boatPositions.includes(i)) {
+                cell.style.backgroundColor = 'red'; 
+                alert('Hit! You hit a boat.');
+            } else {
+                cell.style.backgroundColor = 'blue'; 
+                alert('Miss! No boat here.');
+            }
         });
 
-        document.querySelector('#discount').innerHTML = details.discount;
-        document.querySelector('#vat').innerHTML = details.vat;
-        document.querySelector('#total').innerHTML = details.total;
+        gameBoard.appendChild(cell);
     }
+}
 
-    document.querySelector('#productForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        let productName = document.querySelector('#productName').value;
-        let productQuantity = (document.querySelector('#productQuantity').value);
-        let productPrice = (document.querySelector('#productPrice').value);
+createGameBoard('player-one-board');
+createGameBoard('player-two-board');
 
-        document.querySelector('#add-cart-error').innerText = addToCart(cart, productName, productQuantity, productPrice);
-        document.querySelector('#productName').value = '';
-        document.querySelector('#productQuantity').value = '';
-        document.querySelector('#productPrice').value = '';
+    </script>
 
-        updateCartDetailsDom(cart);
-    });
-
-    document.querySelector('#removeProductForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        let productName = document.querySelector('#removeProductName').value;
-        document.querySelector('#remove-cart-error').innerText = removeFromCart(cart, productName);
-        document.querySelector('#removeProductName').value = '';
-
-        updateCartDetailsDom(cart);
-    });
-
-    document.querySelector('#couponForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        let couponCode = document.querySelector('#couponCode').value;
-        coupon = applyCoupon(couponCode);
-
-        updateCartDetailsDom(cart);
-        document.querySelector('#couponCode').value = '';
-    });
-</script>
-<style>
-    .error {
-        color: red;
-        padding: 10px;
-        display: inline-block;
-    }
-
-    body {
-        padding: 10px;
-    }
-</style>
 </body>
 </html>

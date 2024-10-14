@@ -11,7 +11,7 @@
                 })
 
                 // let data = response.json jsoonnn
-                // new pull===
+                // new pull a new request
             })
         }
 

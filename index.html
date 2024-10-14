@@ -120,14 +120,36 @@
 
     <script>
 const boatPositions = [2, 5, 10, 15, 22, 35, 50, 75]; // Example boat locations
+let coordinatesArray = []
+let allCoordinates = {
+    'a': [],
+    'b': [],
+    'c': [],
+    'd': [],
+    'e': [],
+    'f': [],
+    'g': [],
+    'h': [],
+    'i': [],
+    'j': []
+}
+const topCoordinates = 'abcdefghij'
+
+for (const letter of topCoordinates){
+    for(let letterRow = 1; letterRow < 11; letterRow++) {
+        allCoordinates[letter].push(letter + letterRow)
+        coordinatesArray.push(letter)
+    }
+}
+
 
 // Function to generate a 10x10 grid for a gameboard
 function createGameBoard(boardId) {
     const gameBoard = document.getElementById(boardId);
     for (let i = 0; i < 100; i++) {
         const cell = document.createElement('div');
-        cell.classList.add('grid-cell');
-        
+        cell.classList.add(`grid-cell`);
+        cell.id = `${boardId}-grid-cell`
         cell.addEventListener('click', function() {
             if (boatPositions.includes(i)) {
                 cell.style.backgroundColor = 'red'; 
@@ -140,10 +162,23 @@ function createGameBoard(boardId) {
 
         gameBoard.appendChild(cell);
     }
+    
+    for(let row = 0; row < 10; row++) {
+       let rowCell = document.querySelectorAll(`#${boardId}-grid-cell`)
+        console.log(rowCell[row])
+        for(let letter of coordinatesArray) {
+            
+        }
+    }
+
+
 }
 
 createGameBoard('player-one-board');
 createGameBoard('player-two-board');
+
+//console.log(document.querySelectorAll('#player-one-board-grid-cell'))
+//console.table(allCoordinates)
 
     </script>
 

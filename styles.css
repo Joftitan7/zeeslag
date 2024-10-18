@@ -1,0 +1,128 @@
+/* Main background settings */
+body {
+    background-image: url('https://images2.alphacoders.com/714/714746.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.game-container {
+    display: flex;
+    justify-content: space-between; /* Space between the boards */
+    padding: 20px;
+    width: 80%;
+    max-width: 1200px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+.game-section {
+    text-align: center;
+    color: #fff;
+}
+
+.game-section h2 {
+    font-size: 2rem;
+    color: #ffeb3b;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.gameboard {
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+    gap: 5px;
+    margin: 0 auto;
+}
+
+.gameboard div {
+    width: 50px;
+    height: 50px;
+    background-color: #4a90e2;
+    border-radius: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.gameboard div:hover {
+    background-color: #007bff;
+}
+
+/* Controls section styling */
+.controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.controls input[type="text"] {
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    width: 250px;
+}
+
+.controls button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+/* Error message styling */
+.error {
+    color: #ff3b3b;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .gameboard {
+        grid-template-columns: repeat(10, 30px);
+        grid-template-rows: repeat(10, 30px);
+    }
+
+    .game-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .controls input[type="text"] {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .control-row {
+        flex-direction: column;
+    }
+}

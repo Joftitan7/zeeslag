@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="game-container">
+        <div class="game-section">
+            <h2>Player One</h2>
+            <div id="player-one-board" class="gameboard"></div>
+        </div>
+
+        <div class="game-section">
+            <h2>Player Two</h2>
+            <div id="player-two-board" class="gameboard"></div>
+        </div>
+    </div>
+
+    <!-- Controls Section -->
+    <div class="controls">
+        <div class="control-row">
+            <button id="start" class="btn btn-primary">Start Game</button>
+            <button id="reset" class="btn btn-danger">Reset</button>
+        </div>
+        <div class="control-row">
+            <input class="btn btn-danger" id="password" type="text" placeholder="Enter Password">
+            <button class="btn btn-primary" id="confirm">Confirm</button>
+        </div>
+        <span id="error-msg" class="error"></span>
+    </div>
+
+    <script>
+        const BASE_URL = "https://koene.cvoatweb.be/api/public/";
+
+        document.querySelector('#confirm').addEventListener('click', function () {
+            const password = document.querySelector('#password').value;
+            const errorMsg = document.querySelector('#error-msg');
+
+            if (!password) {
+                errorMsg.textContent = 'Password is required!';
+                return;
+            } else {
+                errorMsg.textContent = '';
+            }
+
+            start(password);
+        });
+
+        function start(password) {
+            async function fetchData() {
+                try {
+                    let response = await fetch(BASE_URL + "zeeslagje/start", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            'password': password,
+                            'test': true
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    let data = await response.json();
+                    console.log(data);
+                } catch (error) {
+                    console.error('There was an error:', error);
+                }
+            }
+
+            fetchData();
+        }
+
+        const boatPositions = [2, 5, 10, 15, 22, 35, 50, 75];
+        let coordinatesArray = [];
+        let allCoordinates = {
+            'a': [], 'b': [], 'c': [], 'd': [], 'e': [], 
+            'f': [], 'g': [], 'h': [], 'i': [], 'j': []
+        };
+        const topCoordinates = 'abcdefghij';
+
+        for (const letter of topCoordinates) {
+            coordinatesArray.push(letter);
+            for (let letterRow = 1; letterRow < 11; letterRow++) {
+                allCoordinates[letter].push(letter + letterRow);
+            }
+        }
+
+        function createGameBoard(boardId) {
+            const gameBoard = document.getElementById(boardId);
+            for (let i = 0; i < 100; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add(`${boardId}-grid-cell`);
+                cell.addEventListener('click', function() {
+                    if (boatPositions.includes(i)) {
+                        cell.style.backgroundColor = 'red';
+                        alert('Hit! You hit a boat.');
+                    } else {
+                        cell.style.backgroundColor = 'blue';
+                        alert('Miss! No boat here.');
+                    }
+                });
+
+                gameBoard.appendChild(cell);
+            }
+        }
+
+        createGameBoard('player-one-board');
+        createGameBoard('player-two-board');
+    </script>
+
+</body>
+</html>

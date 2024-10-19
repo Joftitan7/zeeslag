@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship Game</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -23,100 +22,83 @@
         </div>
     </div>
 
-    <!-- Controls Section -->
     <div class="controls">
         <div class="control-row">
             <button id="start" class="btn btn-primary">Start Game</button>
-            <button id="reset" class="btn btn-danger">Reset</button>
+            <button id="reset" class="btn btn-danger">Reset Game</button>
         </div>
+
         <div class="control-row">
-            <input class="btn btn-danger" id="password" type="text" placeholder="Enter Password">
-            <button class="btn btn-primary" id="confirm">Confirm</button>
+            <input id="password" type="text" placeholder="Enter Password">
+            <button class="btn btn-primary" id="set-password">Set Password</button>
         </div>
-        <span id="error-msg" class="error"></span>
+
+        <div class="control-row">
+            <input id="team-name" type="text" placeholder="Enter Team Name">
+            <button class="btn btn-primary" id="confirm">Confirm Team</button>
+        </div>
     </div>
 
     <script>
-        const BASE_URL = "https://koene.cvoatweb.be/api/public/";
+        const SetPassword = document.querySelector('#set-password');
 
-        document.querySelector('#confirm').addEventListener('click', function () {
-            const password = document.querySelector('#password').value;
-            const errorMsg = document.querySelector('#error-msg');
+        // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
+        async function digestMessage(message) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(message);
+            const hash = await window.crypto.subtle.digest("SHA-256", data);
+            return hash;
+        }
+        //https://stackoverflow.com/questions/40031688/how-can-i-convert-an-arraybuffer-to-a-hexadecimal-string-hex
+        function bufferToHex(buffer) {
+            const hashArray = Array.from(new Uint8Array(buffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
 
-            if (!password) {
-                errorMsg.textContent = 'Password is required!';
-                return;
-            } else {
-                errorMsg.textContent = '';
+        async function SettingPassword(hashedPassword) {
+            const url = 'https://koene.cvoatweb.be/api/public/zeeslagje/start';
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    password: hashedPassword,
+                    test: true
+                })
+            });
+
+            const text = await response.text();
+            if (text) {
+                const result = JSON.parse(text);
+                console.log('Response from API:', result);
             }
+        }
 
-            start(password);
+        SetPassword.addEventListener('click', async () => {
+            const password = document.querySelector('#password').value;
+
+            const digestBuffer = await digestMessage(password);
+            const hashedPassword = bufferToHex(digestBuffer);
+            console.log('Hashed password (SHA-256):', hashedPassword);
+
+            await SettingPassword(hashedPassword);
         });
 
-        function start(password) {
-            async function fetchData() {
-                try {
-                    let response = await fetch(BASE_URL + "zeeslagje/start", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            'password': password,
-                            'test': true
-                        })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-
-                    let data = await response.json();
-                    console.log(data);
-                } catch (error) {
-                    console.error('There was an error:', error);
-                }
-            }
-
-            fetchData();
-        }
-
-        const boatPositions = [2, 5, 10, 15, 22, 35, 50, 75];
-        let coordinatesArray = [];
-        let allCoordinates = {
-            'a': [], 'b': [], 'c': [], 'd': [], 'e': [], 
-            'f': [], 'g': [], 'h': [], 'i': [], 'j': []
-        };
-        const topCoordinates = 'abcdefghij';
-
-        for (const letter of topCoordinates) {
-            coordinatesArray.push(letter);
-            for (let letterRow = 1; letterRow < 11; letterRow++) {
-                allCoordinates[letter].push(letter + letterRow);
-            }
-        }
-
         function createGameBoard(boardId) {
-            const gameBoard = document.getElementById(boardId);
+            const gameBoard = document.querySelector(boardId);
             for (let i = 0; i < 100; i++) {
                 const cell = document.createElement('div');
-                cell.classList.add(`${boardId}-grid-cell`);
-                cell.addEventListener('click', function() {
-                    if (boatPositions.includes(i)) {
-                        cell.style.backgroundColor = 'red';
-                        alert('Hit! You hit a boat.');
-                    } else {
-                        cell.style.backgroundColor = 'blue';
-                        alert('Miss! No boat here.');
-                    }
-                });
-
+                cell.classList.add(`${boardId.replace('#', '')}-grid-cell`);
                 gameBoard.appendChild(cell);
             }
         }
 
-        createGameBoard('player-one-board');
-        createGameBoard('player-two-board');
+        createGameBoard('#player-one-board');
+        createGameBoard('#player-two-board');
+
     </script>
 
 </body>

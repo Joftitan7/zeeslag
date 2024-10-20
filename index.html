@@ -14,11 +14,13 @@
         <div class="game-section">
             <h2>Player One</h2>
             <div id="player-one-board" class="gameboard"></div>
+            <p id="team-one-name">Team 1: Not assigned</p> 
         </div>
 
         <div class="game-section">
             <h2>Player Two</h2>
             <div id="player-two-board" class="gameboard"></div>
+            <p id="team-two-name">Team 2: Not assigned</p>
         </div>
     </div>
 
@@ -41,6 +43,11 @@
 
     <script>
         const SetPassword = document.querySelector('#set-password');
+        const SetTeamName = document.querySelector('#confirm');
+
+        let hashedPassword = "";  // This will store the hashed password for later use
+        let teamOneName = "";     // Variable to store Team 1 name
+        let teamTwoName = "";     // Variable to store Team 2 name
 
         // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
         async function digestMessage(message) {
@@ -49,7 +56,8 @@
             const hash = await window.crypto.subtle.digest("SHA-256", data);
             return hash;
         }
-        //https://stackoverflow.com/questions/40031688/how-can-i-convert-an-arraybuffer-to-a-hexadecimal-string-hex
+
+        // https://stackoverflow.com/questions/40031688/how-can-i-convert-an-arraybuffer-to-a-hexadecimal-string-hex
         function bufferToHex(buffer) {
             const hashArray = Array.from(new Uint8Array(buffer));
             const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
@@ -81,10 +89,10 @@
             const password = document.querySelector('#password').value;
 
             const digestBuffer = await digestMessage(password);
-            const hashedPassword = bufferToHex(digestBuffer);
+            hashedPassword = bufferToHex(digestBuffer);  
             console.log('Hashed password (SHA-256):', hashedPassword);
 
-            await SettingPassword(hashedPassword);
+            await SettingPassword(hashedPassword);  
         });
 
         function createGameBoard(boardId) {
@@ -98,6 +106,44 @@
 
         createGameBoard('#player-one-board');
         createGameBoard('#player-two-board');
+
+        async function SetTeamNames() {
+            const teamNameInput = document.querySelector('#team-name');  
+            const teamName = teamNameInput.value; 
+                if (hashedPassword !== "") {
+                    const url = `https://koene.cvoatweb.be/api/public/zeeslagje/register/${hashedPassword}`;
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: teamName,
+                            test: true
+                        })
+                    });
+
+            
+
+                if (teamOneName === "") {
+                    teamOneName = teamName;
+                    document.querySelector('#team-one-name').innerText = `Team 1: ${teamOneName}`;
+                    
+                } else {
+                    teamTwoName = teamName;
+                    document.querySelector('#team-two-name').innerText = `Team 2: ${teamTwoName}`;
+                }
+                teamNameInput.value = "";  
+
+            } else {
+                alert("Password is not set or is incorrect.");
+            }
+        }
+
+        SetTeamName.addEventListener('click', async () => {
+            await SetTeamNames();  
+        });
 
     </script>
 

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship Game - Place Ships</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            height: 100%;
+        }
+        td, th {
+            border: 1px solid black;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 18px;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Battleship Game Board</h2>
+    <table id="seaBattleGrid"></table>
+
+    <div>
+        <label for="ship-select">Select Ship:</label>
+        <select id="ship-select"></select>
+        <input type="text" id="coordinates" placeholder="Enter starting coordinates (e.g., A1)">
+        <select id="orientation">
+            <option value="H">Horizontal</option>
+            <option value="V">Vertical</option>
+        </select>
+        <button onclick="placeShips()">Place Ship</button>
+    </div>
+
+    <script>
+        const apiSecret = '798e7a5b76a95c049df17a09a897d330';
+        const shipEndpoint = 'https://koene.cvoatweb.be/api/public/zeeslagje';
+
+        const defaultShips = [
+            { name: "Carrier", length: 5 },
+            { name: "Battleship", length: 4 },
+            { name: "Cruiser", length: 3 },
+            { name: "Submarine", length: 3 },
+            { name: "Destroyer", length: 2 }
+        ];
+
+        // Fills the dropdown with available ships
+        async function fetchAvailableShips() {
+            const shipSelect = document.querySelector('#ship-select');
+            defaultShips.forEach(ship => {
+                const option = document.createElement('option');
+                option.value = ship.name;
+                option.textContent = `${ship.name} (${ship.length} cells)`;
+                option.dataset.length = ship.length;
+                shipSelect.appendChild(option);
+            });
+        }
+
+        // Creates the 10x10 game board with labeled rows and columns
+        function createBoard() {
+            const table = document.querySelector('#seaBattleGrid');
+            const headerRow = document.createElement('tr');
+            headerRow.appendChild(document.createElement('th'));
+
+            for (let col = 0; col < 10; col++) {
+                const th = document.createElement('th');
+                th.textContent = String.fromCharCode(65 + col); 
+                headerRow.appendChild(th);
+            }
+            table.appendChild(headerRow);
+
+            for (let row = 0; row < 10; row++) {
+                const tr = document.createElement('tr');
+                const rowHeader = document.createElement('th');
+                rowHeader.textContent = row + 1; 
+                tr.appendChild(rowHeader);
+
+                for (let col = 0; col < 10; col++) {
+                    const td = document.createElement('td');
+                    td.dataset.cellId = `${String.fromCharCode(65 + col)}${row + 1}`;
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+        }
+
+        // Places a selected ship on the board
+        async function placeShips() {
+            const selectedShip = document.querySelector('#ship-select').value;
+            const coordinates = document.querySelector('#coordinates').value.toUpperCase();
+            const orientation = document.querySelector('#orientation').value;
+            const shipSelect = document.querySelector('#ship-select');
+
+            if (selectedShip && coordinates && orientation) {
+                await fetch(`${shipEndpoint}/ship`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        secret: apiSecret,
+                        start: coordinates,
+                        type: selectedShip.toLowerCase(),
+                        direction: orientation,
+                    }),
+                });
+                shipSelect.remove(shipSelect.selectedIndex);
+            }
+        }
+
+        createBoard();
+        window.onload = fetchAvailableShips;
+    </script>
+</body>
+</html>

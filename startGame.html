@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Battleship Game</title>
+</head>
+<body>
+    <h2>Start New Battleship Game</h2>
+    <div>
+        <label for="password-input">Enter Game Password:</label>
+        <input type="text" id="password-input" placeholder="Enter a password">
+        <button id="start-button">Start Game</button>
+    </div>
+
+    <script>
+        const apiUrl = 'https://koene.cvoatweb.be/api/public/zeeslagje/start';
+
+        document.querySelector('#start-button').addEventListener('click', async () => {
+    const passwordInput = document.querySelector('#password-input');
+    const password = passwordInput.value.trim();
+
+    if (!password) {
+        alert("Please enter a password.");
+        return;
+    }
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                password: password
+            })
+        });
+
+        
+        const text = await response.text();
+        const result = text ? JSON.parse(text) : {};
+
+        console.log('Game started:', result);
+        alert("Enjoy Your Sea Battle!");
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("There is an error xD");
+    }
+});
+
+
+    </script>
+</body>
+</html>

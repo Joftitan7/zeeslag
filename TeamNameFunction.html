@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship Game - Set Team Name</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="game-section">
+            <h2>Player One</h2>
+            <p id="team-one-name">Team 1: Not assigned</p> 
+        </div>
+
+        <div class="game-section">
+            <h2>Player Two</h2>
+            <p id="team-two-name">Team 2: Not assigned</p>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-row">
+            <input id="team-name" type="text" placeholder="Enter Team Name">
+            <button class="btn btn-primary" id="confirm">Confirm Team</button>
+        </div>
+    </div>
+
+    <script>
+        const SetTeamName = document.querySelector('#confirm');
+        let teamOneName = "";
+        let teamTwoName = "";
+
+        function SetTeamNames() {
+            const teamNameInput = document.querySelector('#team-name');
+            const teamName = teamNameInput.value;
+            
+            if (teamName) {
+                if (teamOneName === "") {
+                    teamOneName = teamName;
+                    document.querySelector('#team-one-name').innerText = `Team 1: ${teamOneName}`;
+                } else {
+                    teamTwoName = teamName;
+                    document.querySelector('#team-two-name').innerText = `Team 2: ${teamTwoName}`;
+                }
+                teamNameInput.value = ""; 
+            } else {
+                alert("Please enter a team name.");
+            }
+        }
+
+        SetTeamName.addEventListener('click', SetTeamNames);
+    </script>
+
+</body>
+</html>

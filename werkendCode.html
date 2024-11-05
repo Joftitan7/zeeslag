@@ -7,8 +7,8 @@
     <style>
         table {
             border-collapse: collapse;
-            width: 100%;
-            height: 100%;
+            width: fit-content;
+            height: fit-content;
         }
         td, th {
             border: 1px solid black;
@@ -33,14 +33,17 @@
         const table = document.querySelector('#seaBattleGrid')
         const coordinates = {}
 
-        const headerRow = document.createElement('tr')
-        headerRow.appendChild(document.createElement('th'))
+        const hr = document.createElement('tr')
+
+        hr.appendChild(document.createElement('th'))
+
         for (let col = 0; col < gridSize; col++) {
             const th = document.createElement('th')
             th.textContent = String.fromCharCode(65 + col)
-            headerRow.appendChild(th)
+            hr.appendChild(th)
+            
         }
-        table.appendChild(headerRow)
+        table.appendChild(hr)
 
         for (let row = 0; row < gridSize; row++) {
             const tr = document.createElement('tr')
@@ -50,9 +53,27 @@
             
             for (let col = 0; col < gridSize; col++) {
                 const td = document.createElement('td')
+                td.id = `${String.fromCharCode(65 + col)}${row + 1}`
                 const cellId = `${String.fromCharCode(65 + col)}${row + 1}`
                 td.textContent = cellId
                 tr.appendChild(td)
+
+                // Dit werkt prima
+                //hier worden de alerts gedaan
+                
+                td.addEventListener('click', function () {
+                    let math = Math.round(Math.random() * 10)
+                    
+                    if(math < 5) {
+                        alert(`${td.id},  ${math}`)
+                    }
+
+
+                })
+
+                
+
+
 
                 const letter = String.fromCharCode(65 + col)
                 if (!coordinates[letter]) {
@@ -67,6 +88,8 @@
     }
 
     createBoard()
+
+    
 
     //table creator
     

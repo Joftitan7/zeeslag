@@ -2,17 +2,13 @@ let placedShips = [];
 let availableShips = [];
 
 async function fetchAvailableShips() {
-    const apiSecret = localStorage.getItem('apiSecret');
-    if (!apiSecret) {
-        console.warn("No secret found, make sure to register.");
-        return;
-    }
+    if (!apiSecret) return console.warn("No API secret found.");
 
     try {
         const response = await fetch(`${apiUrl}/ships/${apiSecret}`);
         if (response.ok) {
             availableShips = await response.json();
-            updateShipDropdown();
+            updateShipDropdown(); 
         } else {
             throw new Error("Failed to retrieve available ships.");
         }
@@ -23,7 +19,7 @@ async function fetchAvailableShips() {
 
 function updateShipDropdown() {
     const shipSelect = document.querySelector('#ship-select');
-    shipSelect.innerHTML = '';  // Clear the dropdown
+    shipSelect.innerHTML = ''; 
 
     availableShips.forEach(ship => {
         const placedCount = placedShips.filter(s => s.name === ship.name).length;
@@ -45,12 +41,12 @@ function capitalizeFirstLetter(string) {
 async function placeShip(cellId) {
     const shipSelect = document.querySelector('#ship-select');
     const shipName = shipSelect.value;
-    const ship = availableShips.find(s => s.name === shipName);
     const orientation = document.querySelector('#orientation').value;
 
-    const apiSecret = localStorage.getItem('apiSecret');
-    if (!apiSecret) {
-        console.warn("No secret found, make sure to register.");
+    const ship = availableShips.find(s => s.name === shipName);
+
+    if (!ship || !shipName) {
+        alert("No more ships to place.");
         return;
     }
 
@@ -58,65 +54,47 @@ async function placeShip(cellId) {
     const remainingCount = ship.quantity - placedCount;
 
     if (remainingCount <= 0) {
-        alert(`You cannot place any more ${shipName}s. All ${ship.quantity} have been placed.`);
+        alert(`Cannot place more ${shipName}s.`);
         return;
     }
 
     if (!canPlaceShip(cellId, ship.length, orientation)) {
-        alert(`The ship cannot be placed here due to board boundaries.`);
+        alert("The ship cannot be placed here due to board boundaries.");
         return;
     }
 
-    const requestData = {
-        secret: apiSecret,
-        start: cellId,  
-        type: shipName,  
-        direction: orientation  
-    };
-
-    console.log("data is", requestData);
-
+    try {
         const response = await fetch(`${apiUrl}/ship`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestData)
+            body: JSON.stringify({ secret: apiSecret, start: cellId, type: shipName, direction: orientation })
         });
 
         if (response.ok) {
-            const result = await response.json();
-            console.log("Ship placed successfully:", result);
-
-            placedShips.push({ name: shipName, position: cellId, orientation: orientation });
-
-            await fetchAvailableShips();  
+            placedShips.push({ name: shipName, position: cellId, orientation });
+            updateShipDropdown(); 
         } else {
-            const errorDetails = await response.json();
-            console.error("Error placing ship:", errorDetails);
             throw new Error("Failed to place ship.");
         }
-    
+    } catch (error) {
+        console.error("Error placing ship:", error);
+    }
 }
 
+
 function canPlaceShip(startCell, shipLength, orientation) {
-    const boardSize = 10;  
+    const boardSize = 10;
     const [startRow, startCol] = parseCell(startCell);
 
-    if (orientation === 'H') {
-        return startCol + shipLength <= boardSize;
-    } else if (orientation === 'V') {
-        return startRow + shipLength <= boardSize;
-    }
-
-    return false;
+    return orientation === 'H'
+        ? startCol + shipLength <= boardSize
+        : startRow + shipLength <= boardSize;
 }
 
 function parseCell(cellId) {
     const row = parseInt(cellId.slice(1), 10);
-    const col = cellId.charCodeAt(0) - 65;  
+    const col = cellId.charCodeAt(0) - 65;
     return [row, col];
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    await fetchAvailableShips();
-
-});
+document.addEventListener('DOMContentLoaded', fetchAvailableShips);

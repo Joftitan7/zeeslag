@@ -4,54 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship Game</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-    <h2>Battleship Game</h2>
+<body class="container my-5">
+    <h2 class="text-center">Battleship Game</h2>
 
-    <div id="password-entry" class="visible">
-        <label for="password-input">Enter Game Password:</label>
-        <input type="text" id="password-input" placeholder="Enter a password">
-        <button onclick="startGame()">Start Game</button>
-        <button onclick="joinGame()">Join Game</button>
-    </div>
-
-    <div id="role-selection" class="hidden">
-        <p>Select Your Role:</p>
-        <div class="role-buttons">
-            <button onclick="registerTeam('player1')">Join as Player 1</button>
-            <button onclick="registerTeam('player2')">Join as Player 2</button>
+    <div id="password-entry" class="mb-4">
+        <label for="password-input" class="form-label">Enter Game Password:</label>
+        <input type="text" id="password-input" class="form-control" placeholder="Enter a password">
+        <div class="mt-2">
+            <button class="btn btn-primary" onclick="startGame()">Start Game</button>
+            <button class="btn btn-secondary" onclick="joinGame()">Join Game</button>
         </div>
     </div>
-    
 
-    <div id="ship-placement" class="hidden">
+    <div id="role-selection" class="mb-4">
+        <p>Select Your Role:</p>
+        <div class="btn-group" role="group">
+            <button id="teamOne" class="btn btn-info" onclick="registerTeam('player1')">Join as Player 1</button>
+            <button id="teamTwo" class="btn btn-info" onclick="registerTeam('player2')">Join as Player 2</button>
+        </div>
+    </div>
+
+    <div id="ship-placement" class="mb-4">
         <h3>Place Your Ships</h3>
-        <label for="ship-select">Select Ship:</label>
-        <select id="ship-select">
+        <label for="ship-select" class="form-label">Select Ship:</label>
+        <select id="ship-select" class="form-select mb-2">
             <option value="carrier">Carrier (5)</option>
             <option value="battleship">Battleship (4)</option>
             <option value="cruiser">Cruiser (3)</option>
             <option value="submarine">Submarine (3)</option>
             <option value="destroyer">Destroyer (2)</option>
         </select>
-        <select id="orientation">
+        <select id="orientation" class="form-select">
             <option value="H">Horizontal</option>
             <option value="V">Vertical</option>
         </select>
-        <p>Click on your board to place the selected ship.</p>
+        <p class="mt-2">Click on your board to place the selected ship.</p>
     </div>
 
-    <div id="game-board-section" class="hidden">
+    <div id="game-board-section">
         <h3 id="player-role"></h3>
         <h4>Your Board</h4>
-        <table id="your-board"></table>
+        <table id="your-board" class="table table-bordered"></table>
         <h4>Opponent's Board</h4>
-        <table id="opponent-board"></table>
-        <button onclick="attack(prompt('Enter target cell (e.g., B5):'))">Attack</button>
+        <table id="opponent-board" class="table table-bordered"></table>
+        <input type="text" id="target-cell" class="form-control mt-2" placeholder="Enter target cell (e.g., B5)">
+        <button id="attack-btn" class="btn btn-danger mt-2">Attack</button>
     </div>
 
-    <div id="game-status">
+    <div id="game-status" class="mt-4">
         <h3>Game Status</h3>
         <p><strong>My Team:</strong> <span id="my-team-name">Not Registered</span></p>
         <p><strong>Opponent Team:</strong> <span id="opponent-team-name">Not Registered</span></p>
@@ -63,5 +66,6 @@
     <script src="js/registerTeam.js"></script>
     <script src="js/shipFunctions.js"></script>
     <script src="js/attack.js"></script>
+    
 </body>
 </html>

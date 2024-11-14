@@ -1,30 +1,35 @@
+const attackButton = document.querySelector('#attack-btn');
+const targetInput = document.querySelector('#target-cell');
+
+attackButton.addEventListener('click', function() {
+    const cellId = targetInput.value;
+    if (cellId) {
+        attack(cellId);
+    } 
+});
+
 async function attack(cellId) {
-    if (!apiSecret) return console.warn("No API secret found.");
+    const response = await fetch(apiUrl + '/attack', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            secret: teamKey,
+            position: cellId
+        })
+    });
 
-    try {
-        const response = await fetch(`${apiUrl}/attack`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ secret: apiSecret, position: cellId })
-        });
-
-        if (response.ok) {
-            const result = await response.json(); 
-
-            const cellElement = document.querySelector(cellId);
-            if (cellElement) {
-                if (result.result === "Hit") {
-                    cellElement.style.backgroundColor = 'red'; 
-                } else if (result.result === "Miss") {
-                    cellElement.style.backgroundColor = 'black'; 
-                }
+    if (response.ok) {
+        const result = await response.json();
+        const cell = document.querySelector(cellId);
+        
+        if (cell) {
+            if (result.result === "Hit") {
+                cell.style.backgroundColor = 'red';
+            } else {
+                cell.style.backgroundColor = 'black';
             }
-
-            alert(`Attack sent to ${cellId}: ${result.result}`);
-        } else {
-            alert("Attack failed.");
         }
-    } catch (error) {
-        console.error("Error attacking:", error);
+
+        alert(`Attack on ${cellId}: ${result.result}`);
     }
 }

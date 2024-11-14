@@ -4,7 +4,9 @@ let placedShips = [];
 async function fetchShips() {
     const response = await fetch(apiUrl + '/ships/' + teamKey, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+             'Content-Type': 'application/json' 
+            }
     });
 
     if (response.ok) {
@@ -33,13 +35,16 @@ function updateShipOptions() {
 async function placeShip(cellId) {
     const shipName = document.querySelector('#ship-select').value;
     const direction = document.querySelector('#orientation').value;
+
     const ship = ships.find(ship => ship.name === shipName);
     const placedCount = placedShips.filter(placedShip => placedShip.name === shipName).length;
 
     if (ship && placedCount < ship.quantity) {
         const response = await fetch(apiUrl + '/ship', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json' 
+            },
             body: JSON.stringify({
                 secret: teamKey,
                 start: cellId,

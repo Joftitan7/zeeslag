@@ -7,7 +7,8 @@ async function startGame() {
 
     const response = await fetch(apiUrl + '/start', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json' },
         body: JSON.stringify({ 
             password: password 
         })

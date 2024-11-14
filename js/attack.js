@@ -11,7 +11,9 @@ attackButton.addEventListener('click', function() {
 async function attack(cellId) {
     const response = await fetch(apiUrl + '/attack', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json' 
+        },
         body: JSON.stringify({
             secret: teamKey,
             position: cellId

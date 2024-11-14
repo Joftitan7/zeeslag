@@ -22,8 +22,10 @@
     <div id="role-selection" class="mb-4">
         <p>Select Your Role:</p>
         <div class="btn-group" role="group">
-            <button id="teamOne" class="btn btn-info" onclick="registerTeam('player1')">Join as Player 1</button>
-            <button id="teamTwo" class="btn btn-info" onclick="registerTeam('player2')">Join as Player 2</button>
+
+            <!--event listeners in html (ook mogelijk in js xD)-->
+            <button id="teamOne" class="btn btn-info" onclick="registerTeam('player1')">Player 1</button>
+            <button id="teamTwo" class="btn btn-info" onclick="registerTeam('player2')">Player 2</button>
         </div>
     </div>
 
@@ -41,7 +43,7 @@
             <option value="H">Horizontal</option>
             <option value="V">Vertical</option>
         </select>
-        <p class="mt-2">Click on your board to place the selected ship.</p>
+        <p class="mt-2">place the selected ship.</p>
     </div>
 
     <div id="game-board-section">

@@ -42,3 +42,4 @@ function createBoard(boardId, isYourBoard = false) {
         table.appendChild(tr);
     }
 }
+//pas je cellid nog aan zodat de andere functies daar kunnen

@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: fit-content;
+            height: fit-content;
+        }
+        td, th {
+            border: 1px solid black;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 18px;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <table id="seaBattleGrid"></table>
+    <script>
+
+
+    function createBoard () {
+        const gridSize = 10
+        const table = document.querySelector('#seaBattleGrid')
+        const coordinates = {}
+
+        const hr = document.createElement('tr')
+
+        hr.appendChild(document.createElement('th'))
+
+        for (let col = 0; col < gridSize; col++) {
+            const th = document.createElement('th')
+            th.textContent = String.fromCharCode(65 + col)
+            hr.appendChild(th)
+            
+        }
+        table.appendChild(hr)
+
+        for (let row = 0; row < gridSize; row++) {
+            const tr = document.createElement('tr')
+            const rowHeader = document.createElement('th')
+            rowHeader.textContent = row + 1
+            tr.appendChild(rowHeader)
+            
+            for (let col = 0; col < gridSize; col++) {
+                const td = document.createElement('td')
+                td.id = `${String.fromCharCode(65 + col)}${row + 1}`
+                const cellId = `${String.fromCharCode(65 + col)}${row + 1}`
+                td.textContent = cellId
+                tr.appendChild(td)
+
+                // Dit werkt prima
+                //hier worden de alerts gedaan
+                
+                
+                td.addEventListener('click', function () {
+                    let math = Math.round(Math.random() * 10)
+                    
+                    if(math < 5) {
+                        alert(`${td.id},  ${math}`)
+                    }
+
+
+                })
+
+                
+
+
+
+                const letter = String.fromCharCode(65 + col)
+                if (!coordinates[letter]) {
+                    coordinates[letter] = []
+                }
+                coordinates[letter].push(cellId)
+            }
+            table.appendChild(tr)
+        }
+
+        console.log(coordinates)
+    }
+
+    createBoard()
+
+    
+
+    //table creator
+    
+    
+    </script>
+</body>
+</html>

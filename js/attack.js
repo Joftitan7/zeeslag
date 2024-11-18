@@ -1,37 +1,26 @@
-const attackButton = document.querySelector('#attack-btn');
-const targetInput = document.querySelector('#target-cell');
 
-attackButton.addEventListener('click', function() {
-    const cellId = targetInput.value;
-    if (cellId) {
-        attack(cellId);
-    } 
-});
 
-async function attack(cellId) {
-    const response = await fetch(apiUrl + '/attack', {
+async function btnPressed() {
+    console.log('pressed')
+
+   const response = await fetch('https://koene.cvoatweb.be/api/public/zeeslagje/attack', {
         method: 'POST',
         headers: { 
-            'Content-Type': 'application/json' 
-        },
+                     'Content-Type': 'application/json' 
+                 },
         body: JSON.stringify({
-            secret: teamKey,
-            position: cellId
+            "secret": selection.secret, //hier komt de secret dynamisch
+            "position": `${document.querySelector('#target-cell').value}`
         })
-    });
+    })
 
-    if (response.ok) {
-        const result = await response.json();
-        const cell = document.querySelector(cellId);
-        
-        if (cell) {
-            if (result.result === "Hit") {
-                cell.style.backgroundColor = 'red';
-            } else {
-                cell.style.backgroundColor = 'black';
-            }
-        }
+    const json = await response.json()
+    console.log(json)
 
-        alert(`Attack on ${cellId}: ${result.result}`);
-    }
+if(json.message =='Invalid data, missing secret' && result == undefined) {
+    alert('No Player has been selected or created')
+} else if(!response.ok) {
+    alert(json.message)
+} else {
+    alert(json.result)
 }

@@ -1,27 +1,27 @@
 const apiUrl = 'https://koene.cvoatweb.be/api/public/zeeslagje';
-let gameKey = '';
 
+let password
 async function startGame() {
-    const password = document.querySelector('#password-input').value.trim();
-    if (!password) return;
 
+    password = document.querySelector('#password-input').value
     const response = await fetch(apiUrl + '/start', {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-            password: password 
+            "password": password,
+            "test": false
         })
-    });
+    })
 
-    if (response.ok) {
-        gameKey = password;
+    
+    if(response.ok) {
+        alert('Game has been created')
+        setInterval(() => {
+            showStatus(selection.secret)
+           
+        }, 5000)
+        return
+    } else {
+        json = await response.json()
+        alert(json.message)
     }
-}
-
-function joinGame() {
-    const password = document.querySelector('#password-input').value.trim();
-    if (!password) return;
-
-    gameKey = password;
 }

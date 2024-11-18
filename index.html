@@ -4,114 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship Game</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f0f8ff;
-            font-family: Arial, sans-serif;
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-top: 20px;
-        }
-
-        .game-container {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 40px;
-        }
-
-        .game-section {
-            text-align: center;
-        }
-
-        .gameboard {
-            display: grid;
-            grid-template-columns: repeat(10, 50px);
-            grid-template-rows: repeat(10, 50px);
-            gap: 5px;
-            padding: 20px;
-            background-color: #cceeff;
-            border: 5px solid #007bff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .player-one-board-grid-cell, .player-two-board-grid-cell {
-            background-color: white;
-            border: 2px solid black;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .grid-cell:hover {
-            background-color: #d6d6d6;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            margin: 0 10px;
-        }
-
-        footer {
-            margin-top: 50px;
-            text-align: center;
-            color: #666;
-        }
-
-        #password {
-            background-color: #007bff;
-            color: white; /* Text color */
-            border: 2px solid #007bff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        #password::placeholder {
-            color: white; 
-            opacity: 1; 
-        }
-
-        #password:focus {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-    </style>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="container my-5">
+    <h2 class="text-center">Battleship Game</h2>
 
-    <div class="game-container">
-        <div class="game-section">
-            <h2>Player One</h2>
-            <div id="player-one-board" class="gameboard"></div>
-        </div>
-
-        <div class="game-section">
-            <h2>Player Two</h2>
-            <div id="player-two-board" class="gameboard"></div>
+    <div id="password-entry" class="mb-4">
+        <label for=""></label>
+        <label for="password-input" hidden class="form-label">Enter Game Password:</label>
+        <input type="text" id="password-input" class="form-control"  placeholder="Enter a password">
+        <div class="mt-2">
+            <button class="btn btn-primary" onclick="startGame()">Start Game</button>
+            <button id="join-name" class="btn btn-info"> Join Game</button>
+            <!-- <button class="btn btn-secondary" onclick="joinGame()">Join Game</button> -->
         </div>
     </div>
 
-    <!-- Controls Section  -->
-    <div class="controls">
-        <button id="start" class="btn btn-primary">Start Game</button>
-        <button id="reset" class="btn btn-danger">Reset</button>
-        <input class="btn btn-danger" id="password" type="text" placeholder="Enter Password">
-        <button class="btn btn-primary" id="confirm">Confirm</button>
+    <div id="role-selection" class="mb-4">
+        <p>Select Your Role:</p>
+        <div class="btn-group" role="group">
+
+            <!--event listeners in html (ook mogelijk in js xD)-->
+            <button id="teamOne" class="btn btn-info"></button>
+            <button id="teamTwo" class="btn btn-info"></button>
+        </div>
+        
+        <!-- //submit name -->
+        <div id="team-Name">
+            <label for="player-name">Enter Your Name</label>
+            <input type="text" name="player-name" id="player-name">
+            <button id="submit-name" class="btn btn-info"> Submit</button>
+            
+        </div>
+
+    </div>
+
+    <div id="ship-placement" class="mb-4">
+        <h3>Place Your Ships</h3>
+        <label for="ship-select" class="form-label">Select Ship:</label>
+        <select id="ship-select" disabled class="form-select mb-2">
+            
+        </select>
+        <select id="orientation" disabled class="form-select">
+            <option value="H">Horizontal</option>
+            <option value="V">Vertical</option>
+        </select>
+        <p class="mt-2">place the selected ship.</p>
     </div>
 
     
@@ -149,7 +88,6 @@
     <script src="js/attack.js"></script>
     <script src="js/status.js"></script>
     <script src="js/BOT.js"></script>
-    
     
 </body>
 </html>

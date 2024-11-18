@@ -1,4 +1,5 @@
 
+
 async function btnPressed() {
     console.log('pressed')
 
@@ -22,11 +23,4 @@ if(json.message =='Invalid data, missing secret' && result == undefined) {
     alert(json.message)
 } else {
     alert(json.result)
-}
-
-
-
-    //alert is hier
-    
-    //console.log(document.querySelector('#target-cell').value)
 }

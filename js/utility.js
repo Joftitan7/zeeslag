@@ -1,3 +1,4 @@
+
 apiUrl = 'https://koene.cvoatweb.be/api/public/zeeslagje';
 let cells = []
 
@@ -88,4 +89,5 @@ function resetBoard() {
     
     
 }
+
 

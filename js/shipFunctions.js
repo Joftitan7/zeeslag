@@ -68,7 +68,6 @@ async function fetchShips(secret) {
       return missedShipPos
 
   }
-  
   shipPos.forEach((element) => {
     let shipCoord = document.querySelector(`#${element}`)
     shipCoord.innerText = shipCoord.id

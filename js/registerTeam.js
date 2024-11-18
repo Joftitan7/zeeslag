@@ -108,7 +108,6 @@ document.querySelector('#join-name').addEventListener('click', async function ()
         }, 5000)
 
 
-        
 
 
         let teamOne = document.querySelector('#teamOne')

@@ -1,4 +1,5 @@
 const apiUrl = 'https://koene.cvoatweb.be/api/public/zeeslagje';
+
 let password
 async function startGame() {
 
@@ -24,4 +25,3 @@ async function startGame() {
         alert(json.message)
     }
 }
-

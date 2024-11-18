@@ -114,81 +114,42 @@
         <button class="btn btn-primary" id="confirm">Confirm</button>
     </div>
 
-    <footer>
-        <p>Battleship Game &copy; 2024</p>
-    </footer>
+    
+        <h3 id="player-role"></h3>
+        <h4></h4>
+        <!-- <h4>Opponent's Board</h4> -->
+         
+        <div id="game-board-section">
+            <div>
+                <table id="your-board" class="table table-bordered board" name="myBoard"></table>
+            </div>
+            <div>
+                <table id="opponent-board" class="table table-bordered board" name="opponentBoard"></table>
+            </div>
+            
+           
+    </div>
+    <input type="text" id="target-cell" class="form-control mt-2" placeholder="Enter target cell (e.g., B5)">
+    <button id="attack-btn" class="btn btn-danger mt-2" onclick="btnPressed()">Attack</button>
+    <button id="show-btn" class="btn btn-danger mt-2" >Show Ships</button>
+    <button id="place-btn" class="btn btn-danger mt-2">Place Ship</button>
+    <button id="bot-btn" class="btn btn-danger mt-2">Smurf Bot</button>
+    <div id="game-status" class="mt-4">
 
-    <script>
-
-    function start(password){
-        
-    }
-
-
-const boatPositions = [2, 5, 10, 15, 22, 35, 50, 75]; // Example boat locations
-let coordinatesArray = []
-let allCoordinates = {
-    'a': [],
-    'b': [],
-    'c': [],
-    'd': [],
-    'e': [],
-    'f': [],
-    'g': [],
-    'h': [],
-    'i': [],
-    'j': []
-}
-const topCoordinates = 'abcdefghij'
-
-for (const letter of topCoordinates){
-
-    coordinatesArray.push(letter)
-    for(let letterRow = 1; letterRow < 11; letterRow++) {
-        allCoordinates[letter].push(letter + letterRow)
-        
-    }
-}
-
-
-// Function to generate a 10x10 grid for a gameboard
-function createGameBoard(boardId) {
-    const gameBoard = document.getElementById(boardId);
-    for (let i = 0; i < 100; i++) {
-        const cell = document.createElement('div');
-        cell.classList.add(`${boardId}-grid-cell`);
-        cell.addEventListener('click', function() {
-            if (boatPositions.includes(i)) {
-                cell.style.backgroundColor = 'red'; 
-                alert('Hit! You hit a boat.');
-            } else {
-                cell.style.backgroundColor = 'blue'; 
-                alert('Miss! No boat here.');
-            }
-        });
-
-        gameBoard.appendChild(cell);
-    }
+        <h3>Game Status</h3>
+        <p><strong>My Team:</strong> <span id="my-team-name">Not Registered</span></p>
+        <p><strong>Opponent Team:</strong> <span id="opponent-team-name">Not Registered</span></p>
+        <p><strong>Turn Status:</strong> <span id="turn-status">Waiting...</span></p>
+    </div>
+    
+    <script src="js/utility.js"></script>
+    <script src="js/startGame.js"></script>
+    <script src="js/registerTeam.js"></script>
+    <script src="js/shipFunctions.js"></script>
+    <script src="js/attack.js"></script>
+    <script src="js/status.js"></script>
+    <script src="js/BOT.js"></script>
     
     
-}
-
-
-
-createGameBoard('player-one-board');
-//createGameBoard('player-two-board');
-
-console.log(coordinatesArray)
-//console.log( document.querySelectorAll('.player-one-board-grid-cell'))
-
-//console.log(document.querySelectorAll('#player-one-board-grid-cell'))
-//console.table(allCoordinates)
-
-
-
-//update: use div.setAttribute
-
-    </script>
-
 </body>
 </html>
